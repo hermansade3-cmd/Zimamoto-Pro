@@ -1117,7 +1117,113 @@
 
   window.addEventListener('scroll',function(){
     document.getElementById('st').className=window.scrollY>300?'scroll-top vis':'scroll-top';
-  });
+  });Nakili code hii na uipaste **kabla ya** `</script>` iliyopo:
+
+```javascript
+  // ===== DARK MODE =====
+  function toggleDarkMode() {
+    const isDark = document.getElementById('darkModeToggle').checked;
+    document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    showToast(isDark ? '🌙 Dark Mode Imewashwa' : '☀️ Light Mode Imewashwa');
+    localStorage.setItem('darkMode', isDark);
+  }
+
+  // ===== FONT SIZE =====
+  function changeFontSize(size) {
+    document.body.style.fontSize = size;
+    showToast('🔤 Ukubwa umebadilishwa');
+  }
+
+  // ===== IMAGE UPLOAD =====
+  function uploadImages(event) {
+    const files = event.target.files;
+    const grid = document.getElementById('imageGrid');
+    Array.from(files).forEach(file => {
+      if (!file.type.startsWith('image/')) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const div = document.createElement('div');
+        div.className = 'image-card';
+        div.innerHTML = `
+          <button class="delete-btn" onclick="this.parentElement.remove(); showToast('🗑️ Picha imefutwa')">✕</button>
+          <img src="${e.target.result}" alt="${file.name}">
+          <div class="image-name">${file.name}</div>
+        `;
+        grid.appendChild(div);
+      };
+      reader.readAsDataURL(file);
+    });
+    showToast('📸 Picha zimewekwa!');
+    event.target.value = '';
+  }
+
+  // ===== COMMENTS =====
+  let comments = [];
+
+  function addComment() {
+    const name = document.getElementById('commentName').value.trim();
+    const text = document.getElementById('commentText').value.trim();
+    if (!name) { showToast('⚠️ Tafadhali andika jina lako!'); return; }
+    if (!text) { showToast('⚠️ Tafadhali andika maoni yako!'); return; }
+    comments.unshift({ id: Date.now(), name, text, time: new Date().toLocaleString(), likes: 0, liked: false });
+    renderComments();
+    document.getElementById('commentName').value = '';
+    document.getElementById('commentText').value = '';
+    showToast('✅ Maoni yako yametumwa!');
+  }
+
+  function renderComments() {
+    document.getElementById('commentCount').textContent = `💬 Maoni (${comments.length})`;
+    if (comments.length === 0) {
+      document.getElementById('commentsList').innerHTML = '<div class="no-comments">Hakuna maoni bado. Kuwa wa kwanza! 🎉</div>';
+      return;
+    }
+    document.getElementById('commentsList').innerHTML = comments.map(c => `
+      <div class="comment-item">
+        <div class="comment-meta">
+          <span class="comment-name">👤 ${c.name}</span>
+          <span class="comment-time">🕐 ${c.time}</span>
+        </div>
+        <div class="comment-text">${c.text}</div>
+        <div class="comment-actions">
+          <button class="like-btn ${c.liked ? 'liked' : ''}" onclick="likeComment(${c.id})">❤️ ${c.likes}</button>
+          <button class="reply-btn" onclick="showToast('💬 Jibu linakuja hivi karibuni!')">↩️ Jibu</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function likeComment(id) {
+    const c = comments.find(c => c.id === id);
+    if (c) { c.liked = !c.liked; c.likes += c.liked ? 1 : -1; renderComments(); }
+  }
+
+  // ===== TABS =====
+  function showTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.getElementById(tabId).classList.add('active');
+  }
+
+  // ===== TOAST =====
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 3000);
+  }
+
+  // ===== LOAD DARK MODE =====
+  window.onload = function() {
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.getElementById('darkModeToggle').checked = true;
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  }
+```
+
+---
+
+Kumbuka pia kuongeza **HTML** na **CSS** za sehemu hizo kwenye tovuti yako kama nilivyoeleza hapo awali! Je, unahitaji msaada wa sehemu nyingine? 😊
 </script>
 </body>
 </html>
