@@ -1186,39 +1186,9 @@
         </div>
         <div class="comment-text">${c.text}</div>
         <div class="comment-actions">
-          <button class="like-btn ${c.liked ? 'liked' : ''}" onclick="likeComment(${c.id})">❤️ ${c.likes}</button>
-          <button class="reply-btn" onclick="showToast('💬 Jibu linakuja hivi karibuni!')">↩️ Jibu</button>
-        </div>
-      </div>
-    `).join('');
-  }
-
-  function likeComment(id) {
-    const c = comments.find(c => c.id === id);
-    if (c) { c.liked = !c.liked; c.likes += c.liked ? 1 : -1; renderComments(); }
-  }
-
-  // ===== TABS =====
-  function showTab(tabId) {
-    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-    document.getElementById(tabId).classList.add('active');
-  }
-
+          <
   // ===== TOAST =====
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 3000);
-  }
-
-  // ===== LOAD DARK MODE =====
-  window.onload = function() {
-    if (localStorage.getItem('darkMode') === 'true') {
-      document.getElementById('darkModeToggle').checked = true;
-      document.documentElement.setAttribute('data-theme', 'dark');
-    }
-  }
+  
 ```
 
 ---
